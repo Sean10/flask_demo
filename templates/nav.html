@@ -1,0 +1,37 @@
+<div class="navbar navbar-expand-md bg-dark fixed-top">
+    <a href="{{ url_for('index') }}" class="navbar-brand">Home</a>
+{#	<div class="navbar-header">#}
+{##}
+{##}
+{#		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">#}
+{#			<span class="icon-bar"></span>#}
+{#			<span class="icon-bar"></span>#}
+{#			<span class="icon-bar"></span>#}
+{#		</button>#}
+{#	</div>#}
+	<div class="navbar-collapse collapse">
+		<ul class="navbar-nav mr-auto">
+		{% if session.user %}
+			<li class="nav-item"><a class="nav-link" href="{{ url_for('users_list') }}">Users</a></li>
+			<li class="nav-item"><a class="nav-link" href="{{ url_for('posts') }}">Posts</a></li>
+			<li class="nav-item"><a class="nav-link" href="{{ url_for('new_post') }}">New post</a></li>
+			<li class="nav-item"><a class="nav-link" href="{{ url_for('blog_settings') }}">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('todo.index') }}">Todos</a></li>
+
+		{% endif %}
+		</ul>
+
+{#        <ul class="navbar-nav">#}
+
+		{% if session.user %}
+			<a href="{{ url_for('logout') }}">Logout</a>
+		{% else %}
+			<a href="{{ url_for('login') }}">Login</a>
+		{% endif %}
+{#		</ul>#}
+{#		<form class="navbar-form navbar-right search-form" method="post" action="{{ url_for('search') }}">#}
+{#            <input type="text" name="query" class="form-control col-lg-8" placeholder="Search">#}
+{#			<input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">#}
+		</form>
+	</div>
+</div>

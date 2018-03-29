@@ -1,0 +1,13 @@
+__pycache__/
+/data
+*.db
+*.pyc
+instance/
+.idea/
+*/.DS_Store
+.DS_Store
+node_modules/
+dist/
+data/
+db/
+*.log

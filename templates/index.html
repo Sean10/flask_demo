@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	{%- block head -%}{%- include 'head.html' -%}{%- endblock -%}
+	<body>
+		<div id="wrapper">
+			{%- block nav -%}{%- include 'nav.html' -%}{%- endblock -%}
+			<div class="container">
+				{%- block body -%}
+					{%- if posts -%}
+						{%- for post in posts -%}
+							<div class="post clearfix">
+								<div class="row">
+									<div class="col-lg-8">
+										<div class="page-header">
+											<h1><a href="{{ url_for('single_post', permalink=post['permalink']) }}">{{ post['title'] | safe }}</a></h1>
+											<p><span class="icon-time">&nbsp;</span><i>Posted on {{ post['date'] |formatdate }} by {{ post['author'] }}</i></p>
+										</div>
+										<div class="content no-lightbox">
+											{%- if post['preview'] -%}
+												{{ post['preview']}}
+											{%- else -%}
+												{{ post['body']}}
+											{%- endif -%}
+										</div>
+										<div class="infopanel">
+											<div class="tags">
+												<li class="icon-tags" title="tags"></li>
+												{%- if post['tags'] -%}
+													{%- for tag in post['tags'] -%}
+														&nbsp;<a href="{{ url_for('posts_by_tag', tag=tag) }}">{{ tag }}</a>
+													{%- endfor -%}
+												{%- endif -%}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{%- endfor -%}
+					{% else %}
+						<div class="post clearfix">
+							<div class="row">
+								<div class="col-lg-8">
+									<div class="page-header">
+										<h1>Posts not found..</h1>
+									</div>
+								</div>
+							</div>
+						</div>
+					{%- endif -%}
+					{%- include 'sidebar.html' -%}
+				{%- endblock -%}
+				{% if pagination and pagination.pages > 1 %}
+					<div class="pagination-wrap">
+						<ul class="pagination">
+						  {% for page in pagination.iter_pages() %}
+						    {% if page %}
+						        <li {% if page == pagination.page %}class="active"{% endif %}><a href="{{ url_for_other_page(page) }}">{{ page }}</a></li>
+						    {% else %}
+						      <li><span class=ellipsis>…</span></li>
+						    {% endif %}
+						  {% endfor %}
+						  {% if pagination.has_next %}
+						    <li><a href="{{ url_for_other_page(pagination.page + 1)
+						      }}">&raquo;</a></li>
+						  {% endif %}
+						</ul>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		{%- include 'footer.html' -%}
+		{%- block scripts -%}
+            <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+			{%- block additional_js -%}{%- endblock -%}
+			<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+		{%- endblock -%}
+	</body>
+</html>
