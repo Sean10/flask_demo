@@ -1,8 +1,23 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 17/08/2018 11:22 PM
+# @Author  : sean10
+# @Site    : 
+# @File    : todo.py
+# @Software: PyCharm
+
+"""
+
+
+"""
+
 
 from flask import Blueprint, request, template_rendered, current_app, session
-from ..utils import login_required
-from . import todo_print
-from ..models import todolist
+from .utils import login_required
+from .models import todolist
+
+todo_print = Blueprint('todo', __name__)
+
 # with
 # todoClass = todolist.TodoList(current_app.config)
 

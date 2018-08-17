@@ -9,9 +9,8 @@
 from flask import Flask, current_app, Blueprint
 from .models import todolist
 from .todo import todo_print
-from .blog import blog_print
+from .blog import blog_print, init_class
 from .models import user, post, settings, todolist
-from .blog.view import init_class
 
 
 

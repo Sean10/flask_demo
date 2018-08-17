@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 07/08/2018 11:23 PM
+# @Time    : 17/08/2018 11:21 PM
 # @Author  : sean10
-# @Site    :
-# @File    : view.py
+# @Site    : 
+# @File    : blog.py
 # @Software: PyCharm
 
 """
@@ -11,13 +11,13 @@
 
 """
 import html
-from flask import render_template, request, session, redirect, flash, url_for, abort
+from flask import render_template, request, session, redirect, flash, url_for, abort, Blueprint
 from flask import current_app as app
-from ..utils import url_for_other_page, extract_tags, login_required
-from .. import pagination
-from . import blog_print
+from .utils import url_for_other_page, extract_tags, login_required
+from . import pagination
 from app.models import user, post, settings, todolist
 
+blog_print = Blueprint('blog', __name__)
 
 
 settingsClass = None
