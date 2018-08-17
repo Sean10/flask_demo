@@ -153,7 +153,9 @@ class Post:
 
     @staticmethod
     def validate_post_data(post_data):
+        print("while")
         permalink = random_string(12)
+        print(permalink)
         #exp = re.compile('\W')
         #whitespace = re.compile('\s')
         #temp_title = whitespace.sub("_", post_data['title'])

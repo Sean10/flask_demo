@@ -12,3 +12,7 @@ class config():
     SETTINGS_COLLECTION = DATABASE.settings
     TODOS_COLLECTION = DATABASE.todos
     SECRET_KEY = 'development key'
+
+# 数据库账户密码123
+
+# 博客用户账号sean10密码123

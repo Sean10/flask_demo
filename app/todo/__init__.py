@@ -5,3 +5,8 @@
 # @Site    : 
 # @File    : __init__.py.py
 # @Software: PyCharm
+from flask import Blueprint
+
+todo_print = Blueprint('todo', __name__)
+
+from . import view

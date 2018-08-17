@@ -6,11 +6,16 @@
 # @File    : __init__.py
 # @Software: PyCharm
 
-from flask import Flask, current_app
+from flask import Flask, current_app, Blueprint
 from .models import todolist
-from .blueprints import todo
+from .todo import todo_print
+from .blog import blog_print
+from .models import user, post, settings, todolist
+from .blog.view import init_class
 
-from werkzeug.utils import find_modules, import_string
+
+
+
 
 def create_app(config=None):
     app = Flask(__name__, static_folder="../static", template_folder="../templates")
@@ -24,11 +29,22 @@ def create_app(config=None):
     app.app_context().push()
 
     # db.init_app(app)
-
+    # print(app.app_context().app)
+    # print(app.blueprints)
     # configure_uploads(app, files)
     # patch_request_class(app)
+    init_class(app)
 
-    app.register_blueprint(todo, url_prefix="/todo")
+
+    if isinstance(todo_print, Blueprint):
+        app.register_blueprint(todo_print, url_prefix='/todo')
+
+    if isinstance(blog_print, Blueprint):
+        # print(blog)
+        app.register_blueprint(blog_print, url_prefix='/blog')
+
+
+
 
     return app
 #
