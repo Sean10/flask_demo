@@ -8,5 +8,5 @@ python3 run.py
 ```
 
 # 参考
-1. Flask 0.12
+1. Flask 1.0.2
 2. [damslov Flask-blog](https://github.com/dmaslov/flask-blog)
