@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Time    : 28/03/2018 12:33 AM
-# @Author  : Sean10
+# @username  : Sean10
 # @Site    : 
 # @File    : todolist.py
 # @Software: PyCharm
 
 from bson.objectid import ObjectId
-from ..utils import *
 import html
 import datetime
 
@@ -17,11 +16,11 @@ class TodoList:
         self.response = {'error': None, 'data': None}
         self.debug = default_config['DEBUG']
 
-    def getTodoList(self, author):
+    def getTodoList(self, username):
         self.response['error'] = None
         cond = {}
-        if author is not None:
-            cond = {'author': author}
+        if username is not None:
+            cond = {'username': username}
 
         try:
             # cursor = self.collection.find(cond).sort(
@@ -34,7 +33,7 @@ class TodoList:
                 self.response['data'].append({'id': todo['_id'],
                                               'task': todo['task'],
                                               'date': todo['date'],
-                                              'author': todo['author']})
+                                              'username': todo['username']})
         except Exception as e:
             self.print_debug_info(e, self.debug_mode)
             self.response['error'] = 'todos not found..'
@@ -52,10 +51,10 @@ class TodoList:
 
         return self.response
 
-    def get_total_count(self, author=None):
+    def get_total_count(self, username=None):
         cond = {}
-        if author is not None:
-            cond = {'author': author}
+        if username is not None:
+            cond = {'username': username}
 
         return self.collection.find(cond).count()
 

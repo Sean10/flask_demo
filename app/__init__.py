@@ -8,8 +8,8 @@
 
 from flask import Flask, current_app, Blueprint
 from .models import todolist
-from .todo import todo_print
-from .blog import blog_print, init_class
+from .todo import todo_print, init_class_todo
+from .blog import blog_print, init_class_blog
 from .models import user, post, settings, todolist
 
 
@@ -32,7 +32,8 @@ def create_app(config=None):
     # print(app.blueprints)
     # configure_uploads(app, files)
     # patch_request_class(app)
-    init_class(app)
+    init_class_blog(app)
+    init_class_todo(app)
 
 
     if isinstance(todo_print, Blueprint):

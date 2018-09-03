@@ -19,13 +19,12 @@ from app.models import user, post, settings, todolist
 
 blog_print = Blueprint('blog', __name__)
 
-
 settingsClass = None
 postClass = None
 userClass = None
 
 
-def init_class(app=None):
+def init_class_blog(app):
     global settingsClass
     global postClass
     global userClass
@@ -34,6 +33,7 @@ def init_class(app=None):
     postClass = post.Post(app.config)
     userClass = user.User(app.config)
     # print(settingsClass.get_config())
+
 
 @blog_print.route('/', defaults={'page': 1})
 @blog_print.route('/page-<int:page>')
@@ -49,6 +49,7 @@ def index(page):
     count = postClass.get_total_count()
     pag = pagination.Pagination(page, app.config['PER_PAGE'], count)
     return render_template('index.html', posts=posts['data'], pagination=pag, meta_title=app.config['BLOG_TITLE'])
+
 
 @blog_print.route('/new_post', methods=['GET', 'POST'])
 @login_required()
@@ -108,6 +109,7 @@ def new_post():
                            error=error,
                            error_type=error_type)
 
+
 @blog_print.route('/posts_list', defaults={'page': 1})
 @blog_print.route('/posts_list/page-<int:page>')
 def posts(page):
@@ -122,6 +124,18 @@ def posts(page):
 
     return render_template('posts.html', posts=posts['data'], pagination=pag, meta_title='Posts')
 
+
+@blog_print.route('/post_del?<id>')
+@login_required()
+def post_del(id):
+    ret = postClass.delete_post(id)
+    if ret:
+        flash("成功删除该文章")
+    else:
+        flash("删除失败, 请查看日志")
+    return redirect(url_for('blog.index'))
+
+
 @blog_print.route('/tag/<tag>', defaults={'page': 1})
 @blog_print.route('/tag/<tag>/page-<int:page>')
 def posts_by_tag(tag, page):
@@ -133,7 +147,8 @@ def posts_by_tag(tag, page):
     pag = pagination.Pagination(page, app.config['PER_PAGE'], count)
     return render_template('index.html', posts=posts['data'], pagination=pag, meta_title='Posts by tag: ' + tag)
 
-@blog_print.route('/post_edit?id=<id>')
+
+@blog_print.route('/post_edit?id=<id>', methods=['GET'])
 @login_required()
 def post_edit(id):
     post = postClass.get_post_by_id(id)
@@ -149,12 +164,14 @@ def post_edit(id):
                            error=False,
                            error_type=False)
 
+
 @blog_print.route('/post/<permalink>')
 def single_post(permalink):
     post = postClass.get_post_by_permalink(permalink)
     if not post['data']:
         abort(404)
-    return render_template('single_post.html', post=post['data'], meta_title=app.config['BLOG_TITLE'] + '::' + post['data']['title'])
+    return render_template('single_post.html', post=post['data'],
+                           meta_title=app.config['BLOG_TITLE'] + '::' + post['data']['title'])
 
 
 @blog_print.route('/users')
@@ -162,6 +179,7 @@ def single_post(permalink):
 def users_list():
     users = userClass.get_users()
     return render_template('users.html', users=users['data'], meta_title='Users')
+
 
 @blog_print.route('/add_user')
 @login_required()
@@ -188,6 +206,7 @@ def delete_user(id):
             flash('User deleted!', 'success')
     return redirect(url_for('blog.users_list'))
 
+
 @blog_print.route('/save_user', methods=['POST'])
 @login_required()
 def save_user():
@@ -202,7 +221,7 @@ def save_user():
     if not post_data['email'] or not post_data['_id']:
         flash('Username and Email are required..', 'error')
         if post_data['update']:
-                return redirect(url_for('blog.edit_user', id=post_data['_id']))
+            return redirect(url_for('blog.edit_user', id=post_data['_id']))
         else:
             return redirect(url_for('blog.add_user'))
     else:
@@ -217,6 +236,7 @@ def save_user():
             message = 'User updated!' if post_data['update'] else 'User added!'
             flash(message, 'success')
     return redirect(url_for('blog.edit_user', id=post_data['_id']))
+
 
 @blog_print.route('/login', methods=['GET', 'POST'])
 def login():
@@ -246,11 +266,13 @@ def login():
                            error=error,
                            error_type=error_type)
 
+
 @blog_print.route('/logout')
 def logout():
     if userClass.logout():
         flash('You are logged out!', 'success')
     return redirect(url_for('blog.login'))
+
 
 @blog_print.route('/settings', methods=['GET', 'POST'])
 @login_required()
@@ -364,7 +386,6 @@ def set_globals():
     # app.jinja_env.globals['csrf_token'] = generate_csrf_token
     app.jinja_env.globals['recent_posts'] = postClass.get_posts(10, 0)['data']
     app.jinja_env.globals['tags'] = postClass.get_tags()['data']
-
 
 
 @blog_print.errorhandler(404)
